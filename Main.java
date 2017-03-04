@@ -185,5 +185,85 @@ public class Main extends JFrame implements ActionListener{
 	  save.setEnabled(f); 
 	  
 	  }
+	 ////start the TextAdd class
+ //The TextAdd class represents the interface that allows you to add your text to the image 
+ //In this interface you can input your text, select color, font name, and font size of the text
+ //The TextAdd class is in the Main class
+ public class TextAdd extends JFrame implements ActionListener {
+  JPanel panel;
+  JTextArea txtText;
+  JComboBox cbFontNames;
+  JComboBox cbFontSizes;
+  JButton btOK;
+  JButton btSetColor;
+  String seFontName;
+  Color colorText;
+  int seFontSize;
+  TextAdd(){
+  colorText=null;
+  setTitle("Add text to the image");
+  //setDefaultCloseOperation(EXIT_ON_CLOSE);
+  setPreferredSize(new Dimension(400,150));
+  
+  btOK=new JButton("OK");
+  btOK.setBackground(Color.BLACK);
+  btOK.setForeground(Color.BLUE);  
+  btOK.addActionListener(this);
+
+  btSetColor=new JButton("Set text color");
+  btSetColor.setBackground(Color.BLACK);
+  btSetColor.setForeground(Color.WHITE);  
+  btSetColor.addActionListener(this);
+
+  txtText=new JTextArea(1,30);
+  cbFontNames=new JComboBox();
+  cbFontSizes=new JComboBox();
+  panel=new JPanel();
+  panel.setLayout(new GridLayout(4,1));
+  panel.add(new JLabel("Text:"));
+  panel.add(txtText);
+  panel.add(new JLabel("Font Name:"));  
+  panel.add(cbFontNames);
+  panel.add(new JLabel("Font Size:"));  
+  panel.add(cbFontSizes);
+  panel.add(btSetColor);
+  panel.add(btOK);
+  panel.setBackground(Color.GRAY);
+  add(panel, BorderLayout.CENTER);
+  setVisible(true);
+  pack();
+  listFonts();
+  }
+
+  
+  public void actionPerformed(ActionEvent e){
+   if(e.getSource()==btOK){ //the button OK is clicked so the text is ready to place on the image
+    ia.setActionDraw(true); 
+    String textDraw=txtText.getText(); 
+    String fontName=cbFontNames.getSelectedItem().toString();
+    int fontSize=Integer.parseInt(cbFontSizes.getSelectedItem().toString());
+    ia.setText(textDraw,fontName,fontSize,colorText);
+    dispose();
+    }
+   else if(e.getSource()==btSetColor){ //show color chooser dialog for color selection
+    JColorChooser jser=new JColorChooser();   
+    colorText=jser.showDialog(this,"Color Chooser",Color.BLACK);
+     
+   }
+  }
+  
+  //The listFonts method get all available fonts from the system 
+  public void listFonts(){
+   //get the available font names and add them to the font names combobox
+   GraphicsEnvironment ge=GraphicsEnvironment.getLocalGraphicsEnvironment(); 
+   String[] fonts=ge.getAvailableFontFamilyNames();
+   for(String f:fonts)
+    cbFontNames.addItem(f);
+   //Initialize font sizes
+   for(int i=8;i<50;i++)
+    cbFontSizes.addItem(i);
+   
+  }
+ } ////end of the TextAdd class
 
 	} 
