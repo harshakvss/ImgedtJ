@@ -48,7 +48,7 @@ class ImgArea extends Canvas{
 
    
   
-	  addMouseListener(new mousexy());
+	  addMouseListener(new mousexy()); //hanlding mouse event of Canvas class
 	 
 	   
 
@@ -63,7 +63,7 @@ class ImgArea extends Canvas{
 	  }
 	  
 	  public void paint(Graphics g){
-	   Graphics2D g2d=(Graphics2D)g;   
+	   Graphics2D g2d=(Graphics2D)g;   //create Graphics2D object  
 	   if(imgLoad){
 
 		    
@@ -91,11 +91,42 @@ class ImgArea extends Canvas{
 	  class mousexy extends MouseAdapter{
 	   
 	   public void mousePressed(MouseEvent e){
-	 
-	   }
-	   
-	   
-	  }
+	  Color color=rb.getPixelColor(e.getX(),e.getY()); //get the color at the clicked point
+   	 try{    
+    	setColor(color); //take the color at the clicked point for later use
+   	 if(actionDraw){ //add text to the update image
+   	  if(actionSlided || actionResized || actionTransparent || actionRotated || drawn)
+     	 addTextToImage(e.getX()-x,e.getY()-y, bimg);
+    	 else  //add text to the original image
+      	addTextToImage(e.getX()-x,e.getY()-y, orBufferedImage);
+     	 
+	   		}
+	      } catch(Exception ie){}
+	   					} 
+	  				}
+	 //The addTextToImage method adds the text specified by the user to the image
+ public void addTextToImage(int x,int y, BufferedImage img){
+  //create a blanck buffered image
+  BufferedImage bi=(BufferedImage)createImage(img.getWidth(),img.getHeight());
+  //create the Graphics2D object from the buffered image   
+  Graphics2D  g2d=(Graphics2D)bi.createGraphics();
+  //Set the font of drawing pen
+  g2d.setFont(new Font(fontName,Font.BOLD,fontSize));
+  //Set the pen color
+  g2d.setPaint(colorTextDraw);
+  //Draw the image on the blank buffered image
+  g2d.drawImage(img,0,0,null);
+  //Draw the text on the buffered image
+  g2d.drawString(textToDraw,x,y);
+  //update the image
+  bimg=bi;
+  //there is a text drawing on the image
+  drawn=true;
+  //clean the Graphics2D object    
+  g2d.dispose();
+  //redisplay the update image so the text is displayed on the image now
+  repaint(); 
+  }
 	  
  public void prepareImg(String filename){
    
