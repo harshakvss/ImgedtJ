@@ -25,7 +25,9 @@ public class Main extends JFrame implements ActionListener{
 	 JMenuItem addingtext;
 	 JMenuItem cancel;
 	 String filename;
-	 Main(){
+	
+	 Main()
+	 {
 	  ima=new ImgArea();
 	  Container cont=getContentPane();
 	  cont.add(ima,BorderLayout.CENTER );  
@@ -39,17 +41,21 @@ public class Main extends JFrame implements ActionListener{
 	  open.setMnemonic(KeyEvent.VK_O);
 	  open.addActionListener(this);
 
-	  saveas=new JMenuItem("Save as...");
+	  // Save Button used after editing and updating the image
+	saveas=new JMenuItem("Save as...");
 	  saveas.setMnemonic(KeyEvent.VK_S);
 	  saveas.addActionListener(this);
 
+	  //For saving changes periodically
 	  save=new JMenuItem("Save");
 	  save.setMnemonic(KeyEvent.VK_V);
 	  save.addActionListener(this);  
-
+	
+	   // Exit button for closing the whole application
 	  exit=new JMenuItem("Exit");
 	  exit.setMnemonic(KeyEvent.VK_X);
 	  exit.addActionListener(this);
+	   // These 4 options in the menu are the basic things required for application.
 	  menu.add(open);
 	  menu.add(saveas);
 	  menu.add(save);
@@ -57,34 +63,36 @@ public class Main extends JFrame implements ActionListener{
 
 	  editmenu=new JMenu("Edit");
 	  editmenu.setMnemonic(KeyEvent.VK_E);
+          // The first part Image brightness, which works with slider
 	  bright=new JMenuItem("Image brightness");
 	  bright.setMnemonic(KeyEvent.VK_B);
 	  bright.addActionListener(this);
-
+	  // Adding text on image option, in short used for describing image
 	  addingtext=new JMenuItem("Add text on image");
 	  addingtext.setMnemonic(KeyEvent.VK_A);
 	  addingtext.addActionListener(this);  
-
+          // Magnifying or minimizing pixels
 	  resize=new JMenuItem("Image resize");
 	  resize.setMnemonic(KeyEvent.VK_R);
 	  resize.addActionListener(this);
-	 
+	  // minimizing the quality of pixels, thereby compressing
 	  compress=new JMenuItem("Image compression");
 	  compress.setMnemonic(KeyEvent.VK_P);
 	  compress.addActionListener(this);
-
+	  // Using radian angle to rotate the image, in 4 possible ways
 	  rotate=new JMenuItem("Image rotation");
 	  rotate.setMnemonic(KeyEvent.VK_T);
 	  rotate.addActionListener(this);
-
+	  
 	  transparent=new JMenuItem("Image transparency");
 	  transparent.setMnemonic(KeyEvent.VK_T);
 	  transparent.addActionListener(this);
-	 
+	  // cancelling the editing, can be used to start fresh
 	  cancel=new JMenuItem("Cancel editing");
 	  cancel.setMnemonic(KeyEvent.VK_L);
 	  cancel.addActionListener(this);
-
+	  // All the possible options in image editor
+	  // The buttons regarding the same
 	  editmenu.add(addingtext);
 	  editmenu.add(bright);
 	  editmenu.add(compress);
@@ -96,12 +104,13 @@ public class Main extends JFrame implements ActionListener{
 	  mainmenu.add(menu);
 	  mainmenu.add(editmenu);
 	  setJMenuBar(mainmenu);
-	 
+	 // Setting the tittle for application "Image Editor"
 	  setTitle("Image Editor");
 	  setDefaultCloseOperation(EXIT_ON_CLOSE);
 	  setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
 	     setVisible(true); 
-
+	   // Choosing an image from the libraries
+	   // Eligible extension are jpg, gif, bmp,png
 	  Choose = new JFileChooser();
 	      FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", "jpg", "gif","bmp","png");
 	      Choose.setFileFilter(filter);
@@ -109,6 +118,8 @@ public class Main extends JFrame implements ActionListener{
 	  enableSaving(false);
 	  ima.requestFocus();
 	  }
+	// Extending Jframe for image brightness
+	// Also using slider
  public class ImgBrighten extends JFrame implements ChangeListener{
 
 		 JSlider slider;
@@ -122,8 +133,8 @@ public class Main extends JFrame implements ActionListener{
 			});
 			
 			Container cont=getContentPane();
-			slider=new JSlider(-10,10,0);
-			slider.setEnabled(false);
+			slider=new JSlider(-10,10,0); // Maximum and minimum points set
+			slider.setEnabled(false); // By default at 0
 			slider.addChangeListener(this);
 			cont.add(slider, BorderLayout.CENTER);
 			slider.setEnabled(true);
@@ -135,7 +146,7 @@ public class Main extends JFrame implements ActionListener{
 			enabledSlider(false);
 					}
 		public void enabledSlider(boolean enabled){
-			slider.setEnabled(enabled);
+			slider.setEnabled(enabled); // After opting the slider values can be changed, increased or decreased
 		}
 		
 		public void stateChanged(ChangeEvent e) {
@@ -143,7 +154,7 @@ public class Main extends JFrame implements ActionListener{
 		    ima.setActionSlided(true);   
 		    ima.filterImage();
 		    ima.repaint();
-		    enableSaving(true);
+		    enableSaving(true); // The part of Image Brightness ends here
 			
 		}
 }
@@ -166,20 +177,17 @@ public class Main extends JFrame implements ActionListener{
 	     ib.enabledSlider(true); 
 	     }
 }
-
+ //The setImage method below has the main code that can open the dialog box so the user can choose
+ //the file to show on the program interface
  public void setImage(){
 	  
-	  int retValue = Choose.showOpenDialog(this);
-	      if(retValue == JFileChooser.APPROVE_OPTION) {   
+	  int returnVal= Chooser.showOpenDialog(this);
+	      if(returnVal == JFileChooser.APPROVE_OPTION)
+	      {   
 	   filename=Choose.getSelectedFile().toString();
 	   ima.prepareImg(filename);
-	   }
-	           
+	   }           
 	  }
-
-
-
-	 
 	 public void enableSaving(boolean f){
 	  saveas.setEnabled(f);
 	  save.setEnabled(f); 
